@@ -3,7 +3,7 @@
 # Cookbook:: php
 # Recipe:: ini
 #
-# Copyright:: 2011-2017, Chef Software, Inc.
+# Copyright:: 2011-2018, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,11 +18,32 @@
 # limitations under the License.
 #
 
+if node['php']['fpm_ini_control']
+
+  service node['php']['fpm_service'] do
+    action :enable
+  end
+
+  template "#{node['php']['fpm_conf_dir']}/php.ini" do
+    source node['php']['ini']['template']
+    cookbook node['php']['ini']['cookbook']
+    owner 'root'
+    group node['root_group']
+    mode '0644'
+    manage_symlink_source true
+    variables(directives: node['php']['directives'])
+    notifies :restart, "service[#{node['php']['fpm_service']}]"
+    not_if { node['php']['fpm_conf_dir'].nil? }
+  end
+
+end
+
 template "#{node['php']['conf_dir']}/php.ini" do
   source node['php']['ini']['template']
   cookbook node['php']['ini']['cookbook']
   owner 'root'
   group node['root_group']
   mode '0644'
+  manage_symlink_source true
   variables(directives: node['php']['directives'])
 end

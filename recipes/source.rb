@@ -3,7 +3,7 @@
 # Cookbook:: php
 # Recipe:: source
 #
-# Copyright:: 2011-2017, Chef Software, Inc.
+# Copyright:: 2011-2018, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,14 +20,8 @@
 
 configure_options = node['php']['configure_options'].join(' ')
 
-include_recipe 'build-essential'
-include_recipe 'xml'
-include_recipe 'yum-epel' if node['platform_family'] == 'rhel'
-
-mysql_client 'default' do
-  action :create
-  only_if { configure_options =~ /mysql/ }
-end
+build_essential 'install compilation tools'
+include_recipe 'yum-epel' if platform_family?('rhel')
 
 package node['php']['src_deps']
 
@@ -56,7 +50,7 @@ end
 # inside of the include libraries.
 link '/usr/include/gmp.h' do
   to '/usr/include/x86_64-linux-gnu/gmp.h'
-  only_if { node['platform_family'] == 'debian' && node['platform_version'].to_f >= 14.04 }
+  only_if { platform_family?('debian') && node['platform_version'].to_f >= 14.04 }
 end
 
 bash 'build php' do

@@ -1,6 +1,99 @@
-# php Cookbook CHANGELOG
+# PHP Cookbook CHANGELOG
 
-This file is used to list changes made in each version of the php cookbook.
+This file is used to list changes made in each version of the PHP cookbook.
+
+## Unreleased
+
+- Split out resource documentation into the documentation folder
+- Run cookstyle 0.75.1
+- Fix dependency problem with installing php from source on ubuntu 18.04
+- Simplify platform checks
+- Remove unused long_description metadata from metadata.rb
+- Migrated to Github Actions for testing
+- Adding control of php-fpm php.ini with specific attribute
+
+## 7.0.0 (2019-08-07)
+
+- *Drop support for Chef 13* so we don't need to require build essentials
+- Sync php.ini template with php.ini-production from php-7.2.18
+
+## 6.1.1 (2018-08-07)
+
+- Pass in missing argument to manage_pecl_ini method when trying to remove a module
+
+## 6.1.0 (2018-07-24)
+
+- Allow default recipe to skip pear channel configuration
+
+## 6.0.0 (2018-04-16)
+
+### Breaking Change
+
+This release removes the previous recipes in this cookbook for setting up various PEAR extensions. These should now be setup using the php_pear module directly and not done by adding various recipes / manipulating attributes
+
+### Other Changes
+
+- Use the build_essential resource directly so we can call this from Chef itself on Chef 14
+- Add specs for additional platforms
+- Move the helpers back into the resources which makes them easier to ship in Chef later
+- Break out logic in the channel resource into a helper
+- Add support for Amazon Linux 2
+
+## 5.1.0 (2018-04-05)
+
+- Don't eval the action_class
+- use php pear binary property in all recipes
+- Remove incorrect not_if in the php_pear resource
+- More testing updates
+- Initial support for Ubuntu 18.04
+
+## 5.0.0 (2018-02-15)
+
+- Simplify this cookbook to remove the dependency on mysql cookbook, and remove the database dependencies in the recipes and attributes. This will allow folks who are using the mysql cookbook to be able to upgrade as needed (or pin to earlier versions). As this is a big change, pin to an earlier version if you need the mysql support that was previously available in this cookbook. Future versions may contain a resource that allows for recompiling php with the necessary extensions.
+- Usage of `node['php']['pear']` in the php_pear resource has been replaced with a new 'binary' property for specifying the path to the binary
+- Added a new `priority` property to the php_pear resource
+
+## 4.6.0 (2018-02-07)
+
+- Converted the php_pear resource to a custom resource
+- Moved all helper logic out of the resource and into its own helper library file
+- Fix source install on Ubuntu by making sure we have xml2-config package
+- Remove options that are no longer recognised by the php installer when installing from source
+- Remove matchers as we no longer require them with a modern ChefDK
+
+## 4.5.0 (2017-07-11)
+
+- Add reinstall chefspec matcher
+- Switch from maintainers files to a simple readme section
+- Remove allow_call_time_pass_reference and y2k_compliance config on Debian/Ubuntu as no supported PHP version supports it
+- Initial Debian 9 support
+
+## 4.4.0 (2017-06-27)
+
+- Add a reinstall action to php_pear
+- Added additional specs for package installs on different platforms
+
+## 4.3.0 (2017-06-27)
+
+- Remove fallback default php attributes that were used if we were on an unsupported platform. If we don't know the platform we don't support it and we should fail until we add proper support
+- Add a few attributes needed for fpm support on opensuse. This is a work in progress to get full PHP support on opensuse
+- Install xml deps and avoid using xml cookbook since it's been deprecated
+- Expand the php_pear testing
+- Remove double logging and log the correct package name in php_pear resource
+- Cleanup readme example codes, improve formatting and remove references to LWRPs as they are just resources now
+
+## 4.2.0 (2017-05-30)
+
+- Make sure package intalls, php-fpm, and source installs work on Amazon linux
+- Avoid symlink warning in the converges
+- Simplify the package install logic
+- Rename the inspec test to match the suite name so it actually runs
+- Test on FreeBSD 11 / Amazon Linux
+- Install 5.6.30 by default on source installs
+
+## 4.1.0 (2017-05-30)
+
+- Remove class_eval usage and require Chef 12.7+
 
 ## 4.0.0 (2017-04-20)
 
